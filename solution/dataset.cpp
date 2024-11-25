@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// complete reading the csv into the data set
 void WaterDataset::loadData(const string &filename)
 {
   csv::CSVReader reader(filename);
@@ -20,58 +21,59 @@ void WaterDataset::loadData(const string &filename)
         row["id"].get<>(),
         row["result"].get<float>(),
     };
-    data.push_back(quake);
+    data.push_back(water);
   }
 }
 
+/*
 Quake QuakeDataset::strongest() const
 {
   checkDataExists();
 
   auto quake = max_element(data.begin(), data.end(),
-                           [](Quake a, Quake b)
-                           { return a.getMagnitude() < b.getMagnitude(); });
+    [](Quake a, Quake b) { return a.getMagnitude() < b.getMagnitude(); });
 
   return *quake;
 }
+
 
 Quake QuakeDataset::shallowest() const
 {
   checkDataExists();
 
   auto quake = min_element(data.begin(), data.end(),
-                           [](Quake a, Quake b)
-                           { return a.getDepth() < b.getDepth(); });
+    [](Quake a, Quake b) { return a.getDepth() < b.getDepth(); });
 
   return *quake;
 }
+
 
 double QuakeDataset::meanDepth() const
 {
   checkDataExists();
 
   auto sum = accumulate(data.begin(), data.end(), 0.0,
-                        [](double total, Quake q)
-                        { return total + q.getDepth(); });
+    [](double total, Quake q) { return total + q.getDepth(); });
 
   return sum / data.size();
 }
+
 
 double QuakeDataset::meanMagnitude() const
 {
   checkDataExists();
 
   auto sum = accumulate(data.begin(), data.end(), 0.0,
-                        [](double total, Quake q)
-                        { return total + q.getMagnitude(); });
+    [](double total, Quake q) { return total + q.getMagnitude(); });
 
   return sum / data.size();
 }
 
+
 void QuakeDataset::checkDataExists() const
 {
-  if (size() == 0)
-  {
+  if (size() == 0) {
     throw std::runtime_error("Dataset is empty!");
   }
 }
+*/
