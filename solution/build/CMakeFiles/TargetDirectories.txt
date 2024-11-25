@@ -1,0 +1,5 @@
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/quaketool.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/edit_cache.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/rebuild_cache.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/quaketool_autogen_timestamp_deps.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/quaketool_autogen.dir
