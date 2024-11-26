@@ -3,22 +3,18 @@
 #pragma once
 
 #include <vector>
-#include "quake.hpp"
+#include "water.hpp"
 
-class QuakeDataset
+class WaterDataset
 {
   public:
-    QuakeDataset() {}
-    QuakeDataset(const std::string& filename) { loadData(filename); }
+    WaterDataset() {}
+    WaterDataset(const std::string& filename) { loadData(filename); }
     void loadData(const std::string&);
     int size() const { return data.size(); }
-    Quake operator[](int index) const { return data.at(index); }
-    Quake strongest() const;
-    Quake shallowest() const;
-    double meanDepth() const;
-    double meanMagnitude() const;
+    Water operator[](int index) const { return data.at(index); }
 
   private:
-    std::vector<Quake> data;
+    std::vector<Water> data;
     void checkDataExists() const;
 };

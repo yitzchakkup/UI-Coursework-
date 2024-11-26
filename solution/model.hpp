@@ -9,10 +9,10 @@
 // has a dataset object to store the data
 // Qvariant data is the header data for the table
 
-class QuakeModel : public QAbstractTableModel
+class WaterModel : public QAbstractTableModel
 {
 public:
-  QuakeModel(QObject *parent = nullptr) : QAbstractTableModel(parent) {}
+  WaterModel(QObject *parent = nullptr) : QAbstractTableModel(parent) {}
   void updateFromFile(const QString &);
   bool hasData() const { return dataset.size() > 0; }
 
@@ -21,9 +21,7 @@ public:
   QVariant data(const QModelIndex &, int) const;
   QVariant headerData(int, Qt::Orientation, int) const;
 
-  double meanDepth() const { return dataset.meanDepth(); }
-  double meanMagnitude() const { return dataset.meanMagnitude(); }
 
 private:
-  QuakeDataset dataset;
+  WaterDataset dataset;
 };

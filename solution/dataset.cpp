@@ -46,11 +46,12 @@ void WaterDataset::loadData(const string &filename)
     Water water{
         row["@id"].get<string>(),
         row["result"].get<float>(),
-        row['resultQualifier.noation'].get<string>(),
-        row['codedResultInterpretation.interpretation'].get<string>(),
-        Sample sample,
-        Determinand determinand,
+        row["resultQualifier.notation"].get<string>(),
+        row["codedResultInterpretation.interpretation"].get<string>(),
+        sample,
+        determinand,
     };
+
     data.push_back(water);
   }
 }
@@ -101,7 +102,7 @@ double QuakeDataset::meanMagnitude() const
 
 */
 
-void QuakeDataset::checkDataExists() const
+void WaterDataset::checkDataExists() const
 {
   if (size() == 0) {
     throw std::runtime_error("Dataset is empty!");

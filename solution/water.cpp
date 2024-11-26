@@ -16,11 +16,3 @@ Water::Water(const std::string &id, float result, std::optional<std::string> res
 }
 
 
-ostream& operator<<(ostream& out, const Water& water)
-{
-  return out << "Water Sample ID: " << water.id << "\n"
-           << "Result: " << water.result << " (" << (water.resultQualifier ? *water.resultQualifier : "") << ")\n"
-           << "Interpretation: " << (water.resultInterpretation ? *water.resultInterpretation : "None") << "\n"
-           << water.sample << "\n"
-           << water.determinand << endl;
-}

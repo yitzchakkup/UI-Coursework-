@@ -17,7 +17,7 @@ class WaterWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  QuakeWindow();
+  WaterWindow();
 
 private:
   void createMainWidget();

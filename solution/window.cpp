@@ -56,7 +56,7 @@ void WaterWindow::createButtons()
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
 }
 
-vois WaterWindow::createToolBar()
+void WaterWindow::createToolBar()
 {
   QToolBar *toolBar = new QToolBar();
 
@@ -154,9 +154,9 @@ void WaterWindow::openCSV()
   fileInfo->setText(QString("Current file: <kbd>%1</kbd>").arg(filename));
   table->resizeColumnsToContents();
 
-  if (statsDialog != nullptr && statsDialog->isVisible())
+  if (statsDialog != nullptr)
   {
-    statsDialog->update(model.meanDepth(), model.meanMagnitude());
+    statsDialog->hide();
   }
 }
 
@@ -172,7 +172,7 @@ void WaterWindow::displayStats()
       statsDialog = new StatsDialog(this);
     }
 
-    statsDialog->update(model.meanDepth(), model.meanMagnitude());
+    //statsDialog->update(model.meanDepth(), model.meanMagnitude());
 
     statsDialog->show();
     statsDialog->raise();
