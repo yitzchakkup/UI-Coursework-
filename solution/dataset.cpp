@@ -6,6 +6,9 @@
 #include "dataset.hpp"
 #include "csv.hpp"
 
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 // complete reading the csv into the data set
@@ -17,9 +20,36 @@ void WaterDataset::loadData(const string &filename)
 
   for (const auto &row : reader)
   {
+    SamplingPoint samplingPoint{
+        row["sample.samplingPoint.notation"].get<string>(),
+        row["sample.samplingPoint.easting"].get<float>(),
+        row["sample.samplingPoint.northing"].get<float>(),
+        row["sample.samplingPoint.label"].get<string>(),
+    };
+
+    Determinand determinand{
+        row["determinand.label"].get<string>(),
+        row["determinand.definition"].get<string>(),
+        row["determinand.notation"].get<string>(),
+        row["determinand.unit.label"].get<string>(),
+    };
+
+    Sample sample{
+        samplingPoint,
+        row["sample.purpose.label"].get<string>(),
+        row["sample.sampledMaterialType.label"].get<string>(),
+        row["sample.sampledateTime"].get<string>(),
+        row["sample.isComplianceSample"].get<bool>(),
+    };
+
+
     Water water{
-        row["id"].get<>(),
+        row["@id"].get<string>(),
         row["result"].get<float>(),
+        row['resultQualifier.noation'].get<string>(),
+        row['codedResultInterpretation.interpretation'].get<string>(),
+        Sample sample,
+        Determinand determinand,
     };
     data.push_back(water);
   }
@@ -69,6 +99,7 @@ double QuakeDataset::meanMagnitude() const
   return sum / data.size();
 }
 
+*/
 
 void QuakeDataset::checkDataExists() const
 {
@@ -76,4 +107,4 @@ void QuakeDataset::checkDataExists() const
     throw std::runtime_error("Dataset is empty!");
   }
 }
-*/
+
