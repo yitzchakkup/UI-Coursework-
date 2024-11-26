@@ -1,15 +1,16 @@
 // COMP2811 Coursework 2: data model
 
 #include "model.hpp"
-
-void WatrerModel::updateFromFile(const QString &filename)
+// this is fine don't change
+void WaterModel::updateFromFile(const QString &filename)
 {
   beginResetModel();
   dataset.loadData(filename.toStdString());
   endResetModel();
 }
 
-QVariant WatreModel::data(const QModelIndex &index, int role) const
+// all the attributes (rows) from the dataset
+QVariant WaterModel::data(const QModelIndex &index, int role) const
 {
   if (!index.isValid())
   {
@@ -35,6 +36,7 @@ QVariant WatreModel::data(const QModelIndex &index, int role) const
   return QVariant();
 }
 
+// nees to show all the data
 QVariant WaterModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role != Qt::DisplayRole)
