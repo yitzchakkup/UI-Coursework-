@@ -4,84 +4,88 @@
 
 #include <string>
 #include <iostream>
-#include <optional>
 
+// need to add getter and setter methods
+// verify this is the our chosen implementation (anyone have a better idea?)
+// use the website to model it
+class SamplingPoint
+{
+public:
+  SamplingPoint(std::string notation, float easting, float northing, std::string label)
+      : notation(notation), easting(easting), northing(northing), label(label) {}
 
-// SamplingPoint: Represents where the sample was collected
-class SamplingPoint {
-  private:
-    std::string notation;
-    float easting;
-    float northing;
-    std::string label;
-  public:
-    SamplingPoint(std::string notation, float easting, float northing, std::string label)
-        : notation(notation), easting(easting), northing(northing), label(label) {}
-    std::string getNotation() const { return notation; }
-    float getEasting() const { return easting; }
-    float getNorthing() const { return northing; }
-    std::string getLabel() const { return label; }
+  std::string getNotation() { return notation; }
+  std::string getLabel() { return label; }
+  float getEasting() { return easting; }
+  float getNorthing() { return northing; }
+
+private:
+  std::string notation;
+  float easting;
+  float northing;
+  std::string label;
 };
 
-// Determinand: Describes what is being measured
-class Determinand {
-  private:
-    std::string label;
-    std::string definition;
-    std::string notation;
-    std::string unit;
-  public:
-    Determinand(std::string label, std::string definition, std::string notation, std::string unit)
-        : label(label), definition(definition), notation(notation), unit(unit) {}
-    std::string getLabel() const { return label; }
-    std::string getDefinition() const { return definition; }
-    std::string getNotation() const { return notation; }
-    std::string getUnit() const { return unit; }
+class Determinand
+{
+public:
+  Determinand(std::string label, std::string definition, std::string notation, std::string unit)
+      : label(label), definition(definition), notation(notation), unit(unit) {}
+  std::string getLabel() { return label; }
+  std::string getDefinition() { return definition; }
+  std::string getNotation() { return notation; }
+  std::string getUnit() { return unit; }
+  friend class Water;
+
+private:
+  std::string label;
+  std::string definition;
+  std::string notation;
+  std::string unit;
 };
 
-// Sample: Represents a collected water sample
-class Sample {
-  private:
-    SamplingPoint samplingPoint;
-    std::string purpose;
-    std::string materialType;
-    std::string dateTime;
-    bool isCompliance;
+class Sample
+{
+private:
+  SamplingPoint samplingPoint;
+  std::string purpose;
+  std::string materialType;
+  std::string dateTime;
+  bool isCompliance;
 
-  public:
-    Sample(SamplingPoint samplingPoint, std::string purpose, std::string materialType,
-           std::string dateTime, bool isCompliance)
-        : samplingPoint(samplingPoint), purpose(purpose), materialType(materialType),
-          dateTime(dateTime), isCompliance(isCompliance) {}
-
-    SamplingPoint getSamplingPoint() const { return samplingPoint; }
-    std::string getPurpose() const { return purpose; }
-    std::string getMaterialType() const { return materialType; }
-    std::string getDateTime() const { return dateTime; }
-    bool getIsCompliance() const { return isCompliance; }
-
+public:
+  // Constructor
+  Sample(SamplingPoint samplingPoint, std::string purpose, std::string materialType,
+         std::string dateTime, bool isCompliance)
+      : samplingPoint(samplingPoint), purpose(purpose), materialType(materialType),
+        dateTime(dateTime), isCompliance(isCompliance) {}
+  std::string getPurpose() { return purpose; }
+  std::string getMaterialType() { return materialType; }
+  std::string getDateTime() { return dateTime; }
+  bool getIsCompliance() { return isCompliance; }
+  SamplingPoint getSamplingPoint() { return samplingPoint; }
 };
 
-// Water: Encapsulates all attributes of a water measurement
-class Water {
-  private:
-      std::string id;
-      float result;
-      std::optional<std::string> resultQualifier; //optional entity
-      std::optional<std::string> resultInterpretation; //optional entity 
-      Sample sample;
-      Determinand determinand;
+class Water
+{
+private:
+  std::string id;
+  float result;
+  std::string resultQualifier;
+  std::string resultInterpretation;
+  Sample sample;
+  Determinand determinand;
 
-  public:
-      Water(const std::string &id, float result, std::optional<std::string> resultQualifier,
-            std::optional<std::string> resultInterpretation, Sample sample, Determinand determinand);
-      
-      std::string getId() const { return id; }
-      float getResult() const { return result; }
-      std::optional<std::string> getResultQualifier() const { return resultQualifier; }
-      std::optional<std::string> getResultInterpretation() const { return resultInterpretation; }
-      Sample getSample() const { return sample; }
-      Determinand getDeterminand() const { return determinand; }
-
-    
+public:
+  Water(const std::string &id, float result, std::string resultQualifier, std::string resultInterpretation,
+        Sample sample, Determinand determinand);
+  std::string getId() { return id; }
+  float getResult() { return result; }
+  std::string getResultQualifier() { return resultQualifier; }
+  std::string getResultInteroretation() { return resultInterpretation; }
+  Determinand getDeterminand() { return determinand; }
+  Sample getSample() { return sample; }
 };
+
+std::ostream &operator<<(std::ostream &, const Water &);
+// formating

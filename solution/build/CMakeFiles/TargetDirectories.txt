@@ -1,4 +1,5 @@
-/uolstore/home/users/sc23amb/UI-groupwork/UI-Coursework-fred/solution/build/CMakeFiles/watertool.dir
-/uolstore/home/users/sc23amb/UI-groupwork/UI-Coursework-fred/solution/build/CMakeFiles/edit_cache.dir
-/uolstore/home/users/sc23amb/UI-groupwork/UI-Coursework-fred/solution/build/CMakeFiles/rebuild_cache.dir
-/uolstore/home/users/sc23amb/UI-groupwork/UI-Coursework-fred/solution/build/CMakeFiles/watertool_autogen.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/watertool.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/edit_cache.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/rebuild_cache.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/watertool_autogen_timestamp_deps.dir
+/Users/fred/Documents/GitHub/Year2/UI-Coursework-fred/solution/build/CMakeFiles/watertool_autogen.dir

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'window.hpp'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.6.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -9,19 +9,16 @@
 #include "../../../window.hpp"
 #include <QtCore/qmetatype.h>
 
-#if __has_include(<QtCore/qtmochelpers.h>)
 #include <QtCore/qtmochelpers.h>
-#else
-QT_BEGIN_MOC_NAMESPACE
-#endif
-
 
 #include <memory>
 
+
+#include <QtCore/qxptype_traits.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'window.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.6.2. It"
+#error "This file was generated using the moc from 6.7.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -45,36 +42,9 @@ constexpr auto qt_meta_stringdata_CLASSWaterWindowENDCLASS = QtMocHelpers::strin
     "displayStats",
     "about"
 );
-#else  // !QT_MOC_HAS_STRING_DATA
-struct qt_meta_stringdata_CLASSWaterWindowENDCLASS_t {
-    uint offsetsAndSizes[12];
-    char stringdata0[12];
-    char stringdata1[16];
-    char stringdata2[1];
-    char stringdata3[8];
-    char stringdata4[13];
-    char stringdata5[6];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_CLASSWaterWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_CLASSWaterWindowENDCLASS_t qt_meta_stringdata_CLASSWaterWindowENDCLASS = {
-    {
-        QT_MOC_LITERAL(0, 11),  // "WaterWindow"
-        QT_MOC_LITERAL(12, 15),  // "setDataLocation"
-        QT_MOC_LITERAL(28, 0),  // ""
-        QT_MOC_LITERAL(29, 7),  // "openCSV"
-        QT_MOC_LITERAL(37, 12),  // "displayStats"
-        QT_MOC_LITERAL(50, 5)   // "about"
-    },
-    "WaterWindow",
-    "setDataLocation",
-    "",
-    "openCSV",
-    "displayStats",
-    "about"
-};
-#undef QT_MOC_LITERAL
-#endif // !QT_MOC_HAS_STRING_DATA
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
 Q_CONSTINIT static const uint qt_meta_data_CLASSWaterWindowENDCLASS[] = {

@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/watertool_autogen"
   "watertool_autogen/mocs_compilation.cpp"
+  "watertool_autogen/timestamp"
 )
 
 # Per-language clean rules from dependency scanning.

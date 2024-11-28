@@ -135,12 +135,10 @@ void WaterWindow::openCSV()
     return;
   }
 
-  auto filename = QString("%1_%2.csv")
-                      .arg(significance->currentText())
-                      .arg(period->currentText());
+  auto filename = QString("Y-2024.csv");
 
   auto path = dataLocation + "/" + filename;
-
+  std::cout << path.toStdString() << std::endl;
   try
   {
     model.updateFromFile(path);
@@ -172,7 +170,7 @@ void WaterWindow::displayStats()
       statsDialog = new StatsDialog(this);
     }
 
-    //statsDialog->update(model.meanDepth(), model.meanMagnitude());
+    // statsDialog->update(model.meanDepth(), model.meanMagnitude());
 
     statsDialog->show();
     statsDialog->raise();
