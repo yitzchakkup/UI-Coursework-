@@ -36,10 +36,10 @@ void WaterWindow::createMainWidget()
 // change this
 void WaterWindow::createFileSelectors()
 {
-  QStringList significanceOptions;
-  significanceOptions << "significant" << "4.5" << "2.5" << "1.0" << "all";
-  significance = new QComboBox();
-  significance->addItems(significanceOptions);
+  QStringList pollutantOptions;
+  pollutantOptions << "pollutants";
+  pollutant = new QComboBox();
+  pollutant->addItems(pollutantOptions);
 
   QStringList periodOptions;
   periodOptions << "hour" << "day" << "week" << "month";

@@ -35,7 +35,11 @@ void WaterDataset::loadData(const string &filename)
     };
 
     bool isCompliance = row["sample.isComplianceSample"].get<string>() == "true";
-
+    auto search = std::find(pollutants.begin(), pollutants.end(), determinand.getLabel());
+    if (search == pollutants.end())
+    {
+      pollutants.push_back(determinand.getLabel());
+    }
     if (isCompliance)
     {
       std::cout << "Compliance" << endl;

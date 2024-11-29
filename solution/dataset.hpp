@@ -1,5 +1,5 @@
 // COMP2811 Coursework 1 sample solution: QuakeDataset class
-
+// fred
 #pragma once
 
 #include <vector>
@@ -22,5 +22,6 @@ public:
 
 private:
   std::vector<Water> data;
+  std::vector<std::string> pollutants;
   void checkDataExists() const;
 };

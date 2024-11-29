@@ -1,5 +1,5 @@
 // COMP2811 Coursework 2: data model
-
+// fred
 #include "model.hpp"
 // this is fine don't change
 void WaterModel::updateFromFile(const QString &filename)
@@ -31,11 +31,9 @@ QVariant WaterModel::data(const QModelIndex &index, int role) const
     case 1:
       return QVariant(w.getResult());
     case 2:
-      //return QVariant(w.getResultQualifier());
-      return 0;
+      return QVariant(w.getResultQualifier().c_str());
     case 3:
-      //return QVariant(w.getResultInterpretation());
-      return 0;
+      return QVariant(w.getResultInterpretation().c_str());
     case 4:
       return QVariant(w.getSample().getSamplingPoint().getNotation().c_str());
     case 5:

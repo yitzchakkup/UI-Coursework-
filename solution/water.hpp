@@ -82,7 +82,7 @@ public:
   std::string getId() { return id; }
   float getResult() { return result; }
   std::string getResultQualifier() { return resultQualifier; }
-  std::string getResultInteroretation() { return resultInterpretation; }
+  std::string getResultInterpretation() { return resultInterpretation; }
   Determinand getDeterminand() { return determinand; }
   Sample getSample() { return sample; }
 };
