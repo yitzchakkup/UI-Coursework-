@@ -1,5 +1,5 @@
 // COMP2811 Coursework 2: data model
-
+// fred
 #pragma once
 
 #include <QAbstractTableModel>
