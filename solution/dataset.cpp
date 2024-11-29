@@ -1,5 +1,5 @@
 // COMP2811 Coursework 1 sample solution: QuakeDataset class
-
+// fred
 #include <stdexcept>
 #include <algorithm>
 #include <numeric>
@@ -18,27 +18,28 @@ void WaterDataset::loadData(const string &filename)
   csv::CSVReader reader(filename);
 
   data.clear();
-  int i = 0;
   for (const auto &row : reader)
   {
-    std::cout << i << endl;
-    i += 1;
+
     SamplingPoint samplingPoint{
         row["sample.samplingPoint.notation"].get<string>(),
         row["sample.samplingPoint.easting"].get<float>(),
         row["sample.samplingPoint.northing"].get<float>(),
         row["sample.samplingPoint.label"].get<string>(),
     };
-    std::cout << "S" << endl;
     Determinand determinand{
         row["determinand.label"].get<string>(),
         row["determinand.definition"].get<string>(),
         row["determinand.notation"].get<string>(),
         row["determinand.unit.label"].get<string>(),
     };
-    std::cout << "D" << endl;
-    bool isCompliance = row["sample.isComplianceSample"].get<string>() == "TRUE";
 
+    bool isCompliance = row["sample.isComplianceSample"].get<string>() == "true";
+
+    if (isCompliance)
+    {
+      std::cout << "Compliance" << endl;
+    }
     Sample sample{
         samplingPoint,
         row["sample.purpose.label"].get<string>(),
@@ -46,7 +47,7 @@ void WaterDataset::loadData(const string &filename)
         row["sample.sampleDateTime"].get<string>(),
         isCompliance,
     };
-    std::cout << "Structures" << endl;
+
     Water water{
         row["@id"].get<string>(),
         row["result"].get<float>(),
@@ -55,7 +56,6 @@ void WaterDataset::loadData(const string &filename)
         sample,
         determinand,
     };
-    std::cout << "push back" << endl;
 
     data.push_back(water);
   }
