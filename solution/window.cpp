@@ -60,10 +60,10 @@ void WaterWindow::createToolBar()
 {
   QToolBar *toolBar = new QToolBar();
 
-  QLabel *significanceLabel = new QLabel("Significance");
-  significanceLabel->setAlignment(Qt::AlignVCenter);
-  toolBar->addWidget(significanceLabel);
-  toolBar->addWidget(significance);
+  QLabel *pollutantLabel = new QLabel("Pollutant");
+  pollutantLabel->setAlignment(Qt::AlignVCenter);
+  toolBar->addWidget(pollutantLabel);
+  toolBar->addWidget(pollutant);
 
   QLabel *periodLabel = new QLabel("Period");
   periodLabel->setAlignment(Qt::AlignVCenter);

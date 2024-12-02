@@ -30,7 +30,7 @@ private:
 
   WaterModel model;         // data model used by table
   QString dataLocation;     // location of CSV data files
-  QComboBox *significance;  // selector for quake feed significance level
+  QComboBox *pollutant;     // selector for quake feed significance level
   QComboBox *period;        // selector for quake feed time period
   QPushButton *loadButton;  // button to load a new CSV file
   QPushButton *statsButton; // button to display dataset stats
