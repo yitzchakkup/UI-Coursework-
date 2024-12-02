@@ -1,33 +1,71 @@
 // COMP2811 Coursework 1 sample solution: QuakeDataset class
-
+// fred
 #include <stdexcept>
 #include <algorithm>
 #include <numeric>
 #include "dataset.hpp"
 #include "csv.hpp"
+#include "water.hpp"
+
+#include <iostream>
+#include <string>
 
 using namespace std;
 
-
-void QuakeDataset::loadData(const string& filename)
+// complete reading the csv into the data set
+void WaterDataset::loadData(const string &filename)
 {
   csv::CSVReader reader(filename);
 
   data.clear();
+  for (const auto &row : reader)
+  {
 
-  for (const auto& row: reader) {
-    Quake quake{
-      row["time"].get<>(),
-      row["latitude"].get<double>(),
-      row["longitude"].get<double>(),
-      row["depth"].get<double>(),
-      row["mag"].get<double>()
+    SamplingPoint samplingPoint{
+        row["sample.samplingPoint.notation"].get<string>(),
+        row["sample.samplingPoint.easting"].get<float>(),
+        row["sample.samplingPoint.northing"].get<float>(),
+        row["sample.samplingPoint.label"].get<string>(),
     };
-    data.push_back(quake);
+    Determinand determinand{
+        row["determinand.label"].get<string>(),
+        row["determinand.definition"].get<string>(),
+        row["determinand.notation"].get<string>(),
+        row["determinand.unit.label"].get<string>(),
+    };
+
+    bool isCompliance = row["sample.isComplianceSample"].get<string>() == "true";
+    auto search = std::find(pollutants.begin(), pollutants.end(), determinand.getLabel());
+    if (search == pollutants.end())
+    {
+      pollutants.push_back(determinand.getLabel());
+    }
+    if (isCompliance)
+    {
+      std::cout << "Compliance" << endl;
+    }
+    Sample sample{
+        samplingPoint,
+        row["sample.purpose.label"].get<string>(),
+        row["sample.sampledMaterialType.label"].get<string>(),
+        row["sample.sampleDateTime"].get<string>(),
+        isCompliance,
+    };
+
+    Water water{
+        row["@id"].get<string>(),
+        row["result"].get<float>(),
+        row["resultQualifier.notation"].get<string>(),
+        row["codedResultInterpretation.interpretation"].get<string>(),
+        sample,
+        determinand,
+    };
+
+    data.push_back(water);
   }
 }
 
-
+/*
 Quake QuakeDataset::strongest() const
 {
   checkDataExists();
@@ -71,10 +109,12 @@ double QuakeDataset::meanMagnitude() const
   return sum / data.size();
 }
 
+*/
 
-void QuakeDataset::checkDataExists() const
+void WaterDataset::checkDataExists() const
 {
-  if (size() == 0) {
+  if (size() == 0)
+  {
     throw std::runtime_error("Dataset is empty!");
   }
 }
