@@ -30,8 +30,7 @@ private:
   void addHelpMenu();
   void addPOPMenu();
 
-  void createPOPS();
-  void createTest();
+
 
 
   WaterModel model;         // data model used by table
@@ -52,9 +51,13 @@ private:
 
   QLabel *pollutantName;
 
+  QLabel *pop;
+
 private slots:
   void setDataLocation();
   void openCSV();
   void displayStats();
   void about();
+  void createPOPs();
+  void createTest();
 };
