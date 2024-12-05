@@ -1,4 +1,4 @@
-/ COMP2811 Coursework 2 sample solution: main window
+// COMP2811 Coursework 2 sample solution: main window
 
 #include <QtWidgets>
 #include <stdexcept>
@@ -21,9 +21,12 @@ WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
 
   createPageBar();
 
+  createPOPs();
+
   setMinimumWidth(MIN_WIDTH);
   setWindowTitle("Water Tool");
 }
+
 
 void WaterWindow::createTest()
 {
@@ -36,9 +39,11 @@ void WaterWindow::createTest()
   setCentralWidget(table);
 }
 
-void WaterWindow::createPOPS()
+void WaterWindow::createPOPs()
 {
-  
+  pop = new QLabel("hello world");
+  setCentralWidget(pop);
+
 }
 
 void WaterWindow::createPageBar()
@@ -83,8 +88,8 @@ void WaterWindow::createButtons()
 
   connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
-  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createOverview()));
-  connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPS()));
+  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createTest()));
+  connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPs()));
   connect(litterButton, SIGNAL(clicked()), this, SLOT(createLitter()));
   connect(flourinatedButton, SIGNAL(clicked()), this, SLOT(createFlourinated()));
   connect(complianceButton, SIGNAL(clicked()), this, SLOT(createCompliance()));
@@ -212,6 +217,7 @@ void WaterWindow::displayStats()
     statsDialog->activateWindow();
   }
 }
+
 
 void WaterWindow::about()
 {
