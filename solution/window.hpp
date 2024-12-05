@@ -4,6 +4,7 @@
 
 #include <QMainWindow>
 #include "model.hpp"
+#include "water.hpp"
 
 class QString;
 class QComboBox;
@@ -20,23 +21,36 @@ public:
   WaterWindow();
 
 private:
-  void createMainWidget();
   void createFileSelectors();
   void createButtons();
   void createToolBar();
+  void createPageBar();
   void createStatusBar();
   void addFileMenu();
   void addHelpMenu();
+  void addPOPMenu();
+
+  void createPOPS();
+  void createTest();
+
 
   WaterModel model;         // data model used by table
   QString dataLocation;     // location of CSV data files
-  QComboBox *significance;  // selector for quake feed significance level
+  QComboBox *pollutant;     // selector for quake feed significance level
   QComboBox *period;        // selector for quake feed time period
   QPushButton *loadButton;  // button to load a new CSV file
   QPushButton *statsButton; // button to display dataset stats
+  QPushButton *overviewButton;
+  QPushButton *popsButton;
+  QPushButton *litterButton;
+  QPushButton *flourinatedButton;
+  QPushButton *complianceButton;
+
   QTableView *table;        // table of quake data
   QLabel *fileInfo;         // status bar info on current file
   StatsDialog *statsDialog; // dialog to display stats
+
+  QLabel *pollutantName;
 
 private slots:
   void setDataLocation();
