@@ -1,16 +1,17 @@
-// COMP2811 Coursework 2 sample solution: main window
+/ COMP2811 Coursework 2 sample solution: main window
 
 #include <QtWidgets>
 #include <stdexcept>
 #include <iostream>
 #include "window.hpp"
 #include "stats.hpp"
+#include "water.hpp"
 
 static const int MIN_WIDTH = 620;
 
 WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
 {
-  createMainWidget();
+  createTest();
   createFileSelectors();
   createButtons();
   createToolBar();
@@ -18,11 +19,13 @@ WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
   addFileMenu();
   addHelpMenu();
 
+  createPageBar();
+
   setMinimumWidth(MIN_WIDTH);
   setWindowTitle("Water Tool");
 }
 
-void WaterWindow::createMainWidget()
+void WaterWindow::createTest()
 {
   table = new QTableView();
   table->setModel(&model);
@@ -32,6 +35,26 @@ void WaterWindow::createMainWidget()
 
   setCentralWidget(table);
 }
+
+void WaterWindow::createPOPS()
+{
+  
+}
+
+void WaterWindow::createPageBar()
+{
+  QToolBar *pageBar = new QToolBar();
+
+  pageBar->addWidget(overviewButton);
+  pageBar->addWidget(popsButton);
+  pageBar->addWidget(litterButton);
+  pageBar->addWidget(flourinatedButton);
+  pageBar->addWidget(complianceButton);
+
+
+  addToolBar(Qt::TopToolBarArea, pageBar);
+}
+
 
 // change this
 void WaterWindow::createFileSelectors()
@@ -51,19 +74,30 @@ void WaterWindow::createButtons()
 {
   loadButton = new QPushButton("Load");
   statsButton = new QPushButton("Stats");
+  overviewButton = new QPushButton("Overview");
+  popsButton = new QPushButton("POPs");
+  litterButton = new QPushButton("Litter Indicators");
+  flourinatedButton = new QPushButton("Flourinated compounds");
+  complianceButton = new QPushButton("Compliance Dashboard");
+
 
   connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
+  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createOverview()));
+  connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPS()));
+  connect(litterButton, SIGNAL(clicked()), this, SLOT(createLitter()));
+  connect(flourinatedButton, SIGNAL(clicked()), this, SLOT(createFlourinated()));
+  connect(complianceButton, SIGNAL(clicked()), this, SLOT(createCompliance()));
 }
 
 void WaterWindow::createToolBar()
 {
   QToolBar *toolBar = new QToolBar();
 
-  QLabel *significanceLabel = new QLabel("Significance");
-  significanceLabel->setAlignment(Qt::AlignVCenter);
-  toolBar->addWidget(significanceLabel);
-  toolBar->addWidget(significance);
+  QLabel *pollutantLabel = new QLabel("Pollutant");
+  pollutantLabel->setAlignment(Qt::AlignVCenter);
+  toolBar->addWidget(pollutantLabel);
+  toolBar->addWidget(pollutant);
 
   QLabel *periodLabel = new QLabel("Period");
   periodLabel->setAlignment(Qt::AlignVCenter);
@@ -112,6 +146,7 @@ void WaterWindow::addHelpMenu()
   helpMenu->addAction(aboutAction);
   helpMenu->addAction(aboutQtAction);
 }
+
 
 void WaterWindow::setDataLocation()
 {
