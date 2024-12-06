@@ -5,6 +5,8 @@
 #include <QMainWindow>
 #include "model.hpp"
 #include "water.hpp"
+#include <QtWidgets>
+
 
 class QString;
 class QComboBox;
@@ -29,6 +31,9 @@ private:
   void addFileMenu();
   void addHelpMenu();
   void addPOPMenu();
+  QWidget* creatOverviewPage();
+  void searchBarReturnPressed();
+  void createSearchBar(QVBoxLayout* layout);
 
 
 
@@ -53,11 +58,25 @@ private:
 
   QLabel *pop;
 
+
+  /////////////////////////
+  QLineEdit* searchBar;//for overwiev page
+
+  QWidget* singoltenOverviewPage= nullptr;//this will be a single creation of overviewPage
+
 private slots:
   void setDataLocation();
   void openCSV();
   void displayStats();
   void about();
+
   void createPOPs();
   void createTest();
+  void createLitter();
+  void createFlourinated();
+  void createCompliance();
+
+
+
+
 };
