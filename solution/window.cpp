@@ -6,6 +6,9 @@
 #include "window.hpp"
 #include "stats.hpp"
 #include "water.hpp"
+#include "overwiewPage.hpp"
+
+
 
 static const int MIN_WIDTH = 620;
 
@@ -39,12 +42,92 @@ void WaterWindow::createTest()
   setCentralWidget(table);
 }
 
-void WaterWindow::createPOPs()
+//todo my code is from here
+void WaterWindow::searchBarReturnPressed()
 {
-  pop = new QLabel("hello world");
-  setCentralWidget(pop);
-
+  // Logic to be executed when Enter is pressed in the search bar
+  QString searchTerm = searchBar->text().trimmed();
+  std::cerr << "Search term: " << searchTerm.toStdString() << std::endl;
+  createPOPs();
+  // You can call your search or filtering function here
+  // Example: model.filterData(searchTerm);
 }
+
+void WaterWindow::createSearchBar(QVBoxLayout* layout)
+{
+  QLineEdit* searchBar = new QLineEdit();
+  searchBar->setPlaceholderText("Find pollutant...");
+  layout->addWidget(searchBar);
+
+  // Connect the returnPressed signal to the slot
+  connect(searchBar, &QLineEdit::returnPressed, this, &WaterWindow::searchBarReturnPressed);
+}
+
+
+QWidget* WaterWindow::creatOverviewPage() {
+
+  //todo nake helper function, there all taking info from ****model****
+    QVBoxLayout* layout = new QVBoxLayout();
+
+    // Search bar at the top
+    createSearchBar(layout);
+    // Center section: table and right panels
+    QHBoxLayout* centerLayout = new QHBoxLayout();
+
+    // Pollutants table
+    QTableWidget* pollutantsTable = new QTableWidget();
+    pollutantsTable->setRowCount(10); // Example: 10 rows
+    pollutantsTable->setColumnCount(3); // Example: 3 columns
+    pollutantsTable->setHorizontalHeaderLabels({"Pollutant", "Value", "Compliance"});
+    centerLayout->addWidget(pollutantsTable);
+
+    // Right-side layout for chart and data
+    QVBoxLayout* rightPanelLayout = new QVBoxLayout();
+
+    // Chart placeholder
+    QLabel* chartPlaceholder = new QLabel("Pollutant Trend Over Time (Chart Placeholder)");
+    chartPlaceholder->setAlignment(Qt::AlignCenter);
+    chartPlaceholder->setStyleSheet("border: 1px solid gray; padding: 10px;");
+    rightPanelLayout->addWidget(chartPlaceholder);
+
+    // Advanced data group box
+    QGroupBox* dataBox = new QGroupBox("Advanced Data");
+    QVBoxLayout* dataBoxLayout = new QVBoxLayout();
+    dataBoxLayout->addWidget(new QLabel("Risks: High"));
+    dataBoxLayout->addWidget(new QLabel("Compliance: Within limits"));
+    dataBoxLayout->addWidget(new QLabel("Safety thresholds: 50 µg/m³"));
+    dataBox->setLayout(dataBoxLayout);
+    rightPanelLayout->addWidget(dataBox);
+
+    // Add the right panel layout to the center layout
+    centerLayout->addLayout(rightPanelLayout);
+
+    // Add the center layout to the main layout
+    layout->addLayout(centerLayout);
+  //}
+
+
+  QWidget* centralWidget = new QWidget();//"boxing layout
+  centralWidget->setLayout(layout);
+  return centralWidget;
+}
+
+
+void WaterWindow::createPOPs() {
+  //todo make singolton? for some reasen breaks the code
+  //if(!singoltenOverviewPage) {
+    singoltenOverviewPage = creatOverviewPage();
+  //}
+  //QVBoxLayout* layout = WaterOverwiewPage::createOverviewPage();
+  setCentralWidget(singoltenOverviewPage);
+}
+
+
+void WaterWindow::createLitter(){}
+void WaterWindow::createFlourinated(){}
+void WaterWindow::createCompliance(){}
+
+
 
 void WaterWindow::createPageBar()
 {
@@ -88,6 +171,8 @@ void WaterWindow::createButtons()
 
   connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
+
+  //todo im going to put my code in crate Pops evntully needs to be moved to createtest
   connect(overviewButton, SIGNAL(clicked()), this, SLOT(createTest()));
   connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPs()));
   connect(litterButton, SIGNAL(clicked()), this, SLOT(createLitter()));
