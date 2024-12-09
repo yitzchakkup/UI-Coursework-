@@ -15,6 +15,7 @@ qt_add_executable(watertool
     model.cpp
     window.cpp
     stats.cpp
+    overwiewPage.cpp
 )
 
 target_link_libraries(watertool PRIVATE Qt6::Widgets Qt6::Charts)
