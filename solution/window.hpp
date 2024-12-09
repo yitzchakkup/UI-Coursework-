@@ -9,6 +9,7 @@
 #include <QtWidgets>
 #include <string>
 #include <vector>
+#include "overwiewPage.hpp"//todo added this too
 
 
 
@@ -25,7 +26,9 @@ class WaterWindow : public QMainWindow
 
 public:
   WaterWindow();
-
+  QComboBox* curLocation(){//todo i added
+      return location;
+      }
 private:
   void createFileSelectors();
   void createButtons();
@@ -36,6 +39,13 @@ private:
   void addHelpMenu();
   void addPOPMenu();
   void selectOptions(std::string pollutantList[], int size);
+
+ //todo this is what i added
+  void createTableAndModel();
+  void showDataLoaddedQuestion();
+  QWidget* singoltenOverviewPage= nullptr;//this will be a single creation of overviewPage
+
+
 
 
 
@@ -80,7 +90,9 @@ public slots:
   void displayStats();
   void about();
   void createPOPs();
-  void createTest();
+  void createOverwiew();
   void updateLocations();
   void createLitter();
+  void createFlourinated();
+
 };

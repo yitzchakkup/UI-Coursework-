@@ -18,9 +18,12 @@ using namespace std;
 
 static const int MIN_WIDTH = 620;
 
+
 WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
 {
-  createTest();
+
+  createTableAndModel();
+
   createFileSelectors();
   createButtons();
   createToolBar();
@@ -30,16 +33,35 @@ WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
   createPageBar();
   createPOPs();
   createLitter();
+  createOverwiew();
+
 
   setMinimumWidth(MIN_WIDTH);
   setWindowTitle("Water Tool");
 }
 
 
-void WaterWindow::createTest()
+void WaterWindow::showDataLoaddedQuestion()
 {
+  //todo dhejhrfuws
+  QMessageBox *msgBox = new QMessageBox(this);
+  msgBox->setWindowTitle("Question");
+  msgBox->setText("Do you want to see the loadded data?");
+  msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox->setDefaultButton(QMessageBox::No);
+
+  int ret = msgBox->exec();
+
+  if (ret == QMessageBox::Yes)
+  {
+    // Handle Yes response
+    setCentralWidget(table);
+  }
+}
+
+void WaterWindow::createTableAndModel(){
   string popsList[] = {"PCB Con 028", "PCB Con 105", "PCB Con 052", "PCB Con 101",
-  "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
+ "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
 
   selectOptions(popsList, end(popsList) - begin(popsList));
 
@@ -48,7 +70,22 @@ void WaterWindow::createTest()
   QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
   table->setFont(tableFont);
 
-  setCentralWidget(table);
+
+  }
+void WaterWindow::createOverwiew()
+{
+  //todo make singolton? for some reasen breaks the code
+  //if(!singoltenOverviewPage) {
+  OverwiewPage* page= new OverwiewPage( this,&model);
+  singoltenOverviewPage=page->createOverviewPage();
+  //}
+  //QVBoxLayout* layout = WaterOverwiewPage::createOverviewPage();
+  setCentralWidget(singoltenOverviewPage);
+}
+
+void WaterWindow::createFlourinated()
+{
+
 }
 
 void WaterWindow::createPOPs()
@@ -205,7 +242,7 @@ void WaterWindow::createButtons()
 
   connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
-  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createTest()));
+  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createOverwiew()));
   connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPs()));
   connect(litterButton, SIGNAL(clicked()), this, SLOT(createLitter()));
   connect(flourinatedButton, SIGNAL(clicked()), this, SLOT(createFlourinated()));
@@ -284,6 +321,8 @@ void WaterWindow::setDataLocation()
 
 void WaterWindow::openCSV()
 {
+  createTableAndModel();
+  showDataLoaddedQuestion();
   if (dataLocation == "")
   {
     QMessageBox::critical(this, "Data Location Error",
