@@ -2,7 +2,6 @@
 // fred
 #include <QtWidgets>
 #include "window.hpp"
-#include <QtCharts>
 
 int main(int argc, char *argv[])
 {

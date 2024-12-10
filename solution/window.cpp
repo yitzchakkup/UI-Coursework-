@@ -7,23 +7,23 @@
 #include "stats.hpp"
 #include "water.hpp"
 #include <QtCharts>
+#include <QLineSeries>
+#include <QChart>
+#include <QChartView>
+#include <QToolBox>
+#include <QProgressBar>
+#include <QFrame>
 #include "dataset.hpp"
 #include <string>
 #include <utility>
 #include <vector>
 #include <map>
-
-using namespace std;
-
+#include "overviewPage.hpp"
 
 static const int MIN_WIDTH = 620;
 
-
 WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
 {
-
-  createTableAndModel();
-
   createFileSelectors();
   createButtons();
   createToolBar();
@@ -31,22 +31,29 @@ WaterWindow::WaterWindow() : QMainWindow(), statsDialog(nullptr)
   addFileMenu();
   addHelpMenu();
   createPageBar();
-  createPOPs();
-  createLitter();
-  createOverwiew();
-
-
   setMinimumWidth(MIN_WIDTH);
   setWindowTitle("Water Tool");
 }
 
+void WaterWindow::createDashboard()
+{
+  setCentralWidget(0);
 
-void WaterWindow::showDataLoaddedQuestion()
+  table = new QTableView();
+  table->setModel(&model);
+
+  QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+  table->setFont(tableFont);
+
+  setCentralWidget(table);
+}
+
+void WaterWindow::showDataLoadedQuestion()
 {
   //todo dhejhrfuws
   QMessageBox *msgBox = new QMessageBox(this);
   msgBox->setWindowTitle("Question");
-  msgBox->setText("Do you want to see the loadded data?");
+  msgBox->setText("Do you want to see the loaded data?");
   msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox->setDefaultButton(QMessageBox::No);
 
@@ -55,58 +62,29 @@ void WaterWindow::showDataLoaddedQuestion()
   if (ret == QMessageBox::Yes)
   {
     // Handle Yes response
-    setCentralWidget(table);
+    createDashboard();
   }
 }
 
-void WaterWindow::createTableAndModel(){
-  string popsList[] = {"PCB Con 028", "PCB Con 105", "PCB Con 052", "PCB Con 101",
- "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
-
-  selectOptions(popsList, end(popsList) - begin(popsList));
-
-  table = new QTableView();
-  table->setModel(&model);
-  QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-  table->setFont(tableFont);
-
-
-  }
-void WaterWindow::createOverwiew()
+void WaterWindow::createOverview()
 {
   //todo make singolton? for some reasen breaks the code
   //if(!singoltenOverviewPage) {
-  OverwiewPage* page= new OverwiewPage( this,&model);
-  singoltenOverviewPage=page->createOverviewPage();
+  OverviewPage* page = new OverviewPage(this, &model);
+  singoltenOverviewPage = page->createOverviewPage();
   //}
-  //QVBoxLayout* layout = WaterOverwiewPage::createOverviewPage();
+  //QVBoxLayout* layout = WaterOverviewPage::createOverviewPage();
   setCentralWidget(singoltenOverviewPage);
-}
-
-void WaterWindow::createFlourinated()
-{
-
 }
 
 void WaterWindow::createPOPs()
 {
-  string popsList[] = {"PCB Con 028", "PCB Con 105", "PCB Con 052", "PCB Con 101",
+  setCentralWidget(0);
+
+  QStringList popsList = {"PCB Con 028", "PCB Con 105", "PCB Con 052", "PCB Con 101",
   "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
 
-  selectOptions(popsList, end(popsList) - begin(popsList));
-
-  string currentPollutant = pollutant->currentText().toStdString();
-  string currentlocation = location->currentText().toStdString();
-  vector<pair<string, double>> pollutantInfo = model.getDataset().getPollutants(currentPollutant, currentlocation);
-  map<string, vector<double>> dateData;
-  for (int i = 0; i < pollutantInfo.size(); i++) {
-    //for(int j = 0; j < dateData.size(); j++) {
-      //if (dateData.find(pollutantInfo[i].first) == date.end()) {
-      //  dateData[]
-      //}
-    //}
-    dateData[pollutantInfo[i].first].push_back(pollutantInfo[i].second);
-  }
+  updateFileSelector(pollutant, popsList);
 
   auto *popsChart = new QChart;
   auto *popSeries = new QBarSeries();
@@ -123,126 +101,231 @@ void WaterWindow::createPOPs()
   pops = new QWidget();
   pops->setLayout(popsLayout);
   //pops->addWidget(popsChart);
-  
   setCentralWidget(pops);
 }
 
 void WaterWindow::createLitter()
 {
-  string litterList[] = {"Bathing Water Profile : Other Litter (incl. plastics)",
+  setCentralWidget(0);
+  QStringList litterList = {"Bathing Water Profile : Other Litter (incl. plastics)",
   "Sewage debris", "Tarry residues"};
+  QStringList locationList = {"BRIDLINGTON NORTH (08000)", "BRIDLINGTON SOUTH (08100)", "CAYTON BAY (07500)",
+  "DANES DYKE - FLAMBOROUGH (07950)", "FILEY (07600)", "FLAMBOROUGH SOUTH LANDING (07900)", "FRAISTHORPE (08300)",
+  "HORNSEA (08700)", "REIGHTON (07700)", "ROBIN HOODS BAY (07200)", "RUNSWICK BAY (06900)", "SANDSEND (07000)",
+  "SCARBOROUGH NORTH BAY (07300)", "SCARBOROUGH SOUTH BAY (07400)", "WHITBY (07100)", "WILSTHORPE (08200)",
+  "WITHERNSEA (08900)", "WHARFE AT WILDERNESS CAR PARK (08904)", "WHARFE AT CROMWHEEL - ILKLEY (08901)",
+  "NIDD AT THE LIDO - KNARESBOROUGH (08903)"};
 
-  selectOptions(litterList, end(litterList) - begin(litterList));
+  updateFileSelector(pollutant, litterList);
+  updateFileSelector(location, locationList);
 
+  
+  QBarSeries *litterSeries = new QBarSeries();
+  QBarSet *set1 = new QBarSet("Bathing Water Profile : Other Litter (incl. plastics)");
+  double set1List[] = {0.2, 0.625, 0, 0.26, 0.15, 0, 0.86, 0.16, 0.11, 0.17, 0.15, 0.5, 0.2, 0.37, 0.25, 0.48, 0.5, 1.73, 0.71, 0.65};
+  for (int i = 0; i < 20; i++){
+    set1->append(set1List[i]);
+  }
+
+  QBarSet *set2 = new QBarSet("Sewage debris");
+  double set2List[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.05, 0, 0, 0, 0, 0};
+  for (int i = 0; i < 20; i++){
+    set2->append(set2List[i]);
+  }
+
+  QBarSet *set3 = new QBarSet("Tarry residues");
+  double set3List[] = {0.14, 0.74, 0, 0, 0, 0.053, 0.4, 0.32, 0, 0, 0, 0.045, 0, 0, 0, 0.71, 0.053, 0, 0, 0};
+  for (int i = 0; i < 20; i++){
+    set3->append(set3List[i]);
+  }
+
+  litterSeries->append(set1);
+  litterSeries->append(set2);
+  litterSeries->append(set3);
+
+  QChart *litterChart = new QChart;
+  litterChart->addSeries(litterSeries);
+  litterChart->setTitle("Average presence of litters in various locations");
+  litterChart->setAnimationOptions(QChart::SeriesAnimations);
+
+  QStringList locationName;
+  for (int i = 0; i < 20; i++){
+    locationName.append(locationList);
+  }
+
+  QLineSeries *redLine = new QLineSeries();
+  redLine->append(0, 1.0);
+  redLine->append(20, 1.0);
+  QPen redPen(Qt::red);
+  redPen.setWidth(3);
+  redLine->setPen(redPen);
+  litterChart->addSeries(redLine);
+  
+  QLineSeries *yellowLine = new QLineSeries();
+  yellowLine->append(0, 0.5);
+  yellowLine->append(20, 0.5);
+  QPen yellowPen(Qt::yellow);
+  yellowPen.setWidth(3);
+  yellowLine->setPen(yellowPen);
+  litterChart->addSeries(yellowLine);
+
+  QLineSeries *greenLine = new QLineSeries();
+  greenLine->append(0, 0.25);
+  greenLine->append(20, 0.25);
+  QPen greenPen(Qt::green);
+  greenPen.setWidth(3);
+  greenLine->setPen(greenPen);
+  litterChart->addSeries(greenLine);
+
+  QBarCategoryAxis *axisX = new QBarCategoryAxis();
+  axisX->append(locationName);
+  axisX->setTitleText("Locations");
+  litterChart->addAxis(axisX, Qt::AlignBottom);
+  litterSeries->attachAxis(axisX);
+
+  QValueAxis *axisY = new QValueAxis();
+  axisY->setRange(0, 2);
+  axisY->setTitleText("garber c");
+  litterChart->addAxis(axisY, Qt::AlignLeft);
+  litterSeries->attachAxis(axisY);
+
+  litterChart->legend()->setVisible(true);
+  litterChart->legend()->setAlignment(Qt::AlignBottom);
+  litterChart->legend()->markers(redLine)[0]->setLabel("1.0 (Exceeding safe levels)");
+  litterChart->legend()->markers(yellowLine)[0]->setLabel("0.5 (Levels for concern)");
+  litterChart->legend()->markers(greenLine)[0]->setLabel("0.25 (Safe levels)");
+  litterChart->setVisible(true);
+
+  redLine->attachAxis(axisX);
+  redLine->attachAxis(axisY);
+
+  yellowLine->attachAxis(axisX);
+  yellowLine->attachAxis(axisY);
+  
+  greenLine->attachAxis(axisX);
+  greenLine->attachAxis(axisY);
+  
+  
+  litterSeries->setName("Types of litter");
+  
+  QChartView *litterChartView = new QChartView(litterChart);
+  litterChartView->setRenderHint(QPainter::Antialiasing);
+  litterChartView->setVisible(true);
+
+  QVBoxLayout *litterLayout = new QVBoxLayout();
+  litterLayout->addWidget(litterChartView);
   litter = new QWidget();
-  auto litterLayout = new QVBoxLayout();
   litter->setLayout(litterLayout);
-
   setCentralWidget(litter);
 }
 
-void WaterWindow::selectOptions(string pollutantList[], int size)
+void WaterWindow::createFlourinated()
 {
-  vector<string> locations;
-  bool exists = false;
+  setCentralWidget(0);
+  //  Create a container widget for this page
+  QWidget *flourinatedWidget = new QWidget();
+  QVBoxLayout *layout = new QVBoxLayout();
 
-  pollutant = new QComboBox();
-  location = new QComboBox();  //TODO: MAKE A GETLOCATION FUNCTION FOR A GIVEN POLLUTANT
-  for(int i = 0; i < size; i++) {
-    pollutant->addItem(QString::fromStdString(pollutantList[i]));
+  QLabel *pfaLabel = new QLabel("label");
+  QLabel *locationLabel = new QLabel("location");
+  QFrame *complianceBar = new QFrame();
 
-    /*for(string j : locations) {
-        if (pollutantList[i]==j) {
-          exists = true;
-        }
-    }
-    if (exists == false) {
-      locations.push_back(pollutantList[i]);
-      location->addItem(QString::fromStdString(pollutantList[i]));
-    }
-    exists = false;*/
+  complianceBar->setFrameShape(QFrame::HLine);
+  complianceBar->setFixedHeight(10);
+
+  layout->addWidget(pfaLabel);
+  layout->addWidget(locationLabel);
+  layout->addWidget(complianceBar);
+
+  FlourineChart *fchart = new FlourineChart();
+  if (model.hasData())
+  {
+    fchart->loadDataset(model.getData());
   }
-  connect(pollutant, SIGNAL(activated(int)), this, SLOT(updateLocations()));
+
+  // Create file selectors specific to this window
+
+  updateFileSelector(pollutant, fchart->getDeterminands());
+  updateFileSelector(location, fchart->getLocations(pollutant->currentText().toStdString()));
+
+  // Create a chart and chart view
+  fchart->loadDataset(model.getData());
+  QChart *chart = new QChart();
+  fchart->initChart(chart);
+  std::cout << "chart created" << std::endl;
+  QChartView *chartView = new QChartView(chart);
+  layout->addWidget(chartView);
+
+  // Connect selectors to a slot for updating the chart
+  connect(pollutant, &QComboBox::currentTextChanged, this, [=]()
+          { fchart->updateChart(chart, pollutant->currentText().toStdString());
+            updateFileSelector(location, fchart->getLocations(pollutant->currentText().toStdString()));
+            fchart->updateCompliance(pfaLabel, locationLabel, complianceBar, pollutant->currentText().toStdString(), 
+                              location->currentText().toStdString()); });
+  connect(location, &QComboBox::currentTextChanged, this, [=]()
+          { fchart->updateCompliance(pfaLabel, locationLabel, complianceBar, pollutant->currentText().toStdString(),
+                                     location->currentText().toStdString()); });
+  chartView->setChart(chart);
+  // Set the layout and widget as the central widget
+  flourinatedWidget->setLayout(layout);
+  setCentralWidget(flourinatedWidget);
+  
 }
 
-void WaterWindow::updateLocations()
+void WaterWindow::createCompliance()
 {
-  location->clear();
-  cout << "UPDATING LOCATION DROP-DOWN" << endl;
-  vector<string> locations;
-  bool exists = false;
-  for (int i = 0; i < pollutant->count(); i++) {
-    for (string j : (model.getDataset().getLocations(pollutant->itemText(i).toStdString()))) {
-      for (string l : locations) {
-        if (j == l) {
-          exists = true;
-        }
-      }
-      if (exists == false) {
-        locations.push_back(j);
-        location->addItem(QString::fromStdString(j));
-        cout << location->itemText(location->count()-1).toStdString() << endl; //cout gives correct output but nothing appears on screen
-      }
-      exists = false;
-    }
-  }
-  location->update();
-  //toolBar->addWidget(location);
+
 }
 
 void WaterWindow::createPageBar()
 {
   QToolBar *pageBar = new QToolBar();
-
+  pageBar->addWidget(dashboardButton);
+  pageBar->addSeparator();
   pageBar->addWidget(overviewButton);
   pageBar->addWidget(popsButton);
   pageBar->addWidget(litterButton);
   pageBar->addWidget(flourinatedButton);
   pageBar->addWidget(complianceButton);
 
-
   addToolBar(Qt::TopToolBarArea, pageBar);
 }
-
 
 // change this
 void WaterWindow::createFileSelectors()
 {
-  //QStringList pollutantOptions;
-  //pollutantOptions << "pollutants";
-  /*std::vector<Water> pollutantsVector = model.dataset.getData();
-  for (int i = 0; i < pollutantsVector.size(); i++) {
-    pollutantOptions.append(pollutantsVector[i].getDeterminand().getLabel())
-  }*/
-  /*pollutant = new QComboBox();
-  for(std::string i : model.dataset.getLabels()) {
-    QMessageBox test;
-    test.setText(QString::fromStdString(i));
-    test.exec();
-    pollutant->addItem(QString::fromStdString(i));
-  }*/
-  //pollutant->addItems(pollutantOptions);
+  QStringList pollutantOptions;
+  pollutantOptions << "pollutants";
+  pollutant = new QComboBox();
+  pollutant->addItems(pollutantOptions);
 
-  /*QStringList locationOptions;
-  locationOptions << "hour" << "day" << "week" << "month";
+  QStringList locationOptions;
+  locationOptions << "locations";
   location = new QComboBox();
-  location->addItems(locationOptions);*/
+  location->addItems(locationOptions);
+}
+
+void WaterWindow::updateFileSelector(QComboBox *selector, QStringList options)
+{
+  selector->clear();
+  selector->addItems(options);
 }
 
 void WaterWindow::createButtons()
 {
   loadButton = new QPushButton("Load");
   statsButton = new QPushButton("Stats");
+  dashboardButton = new QPushButton("Dashboard");
   overviewButton = new QPushButton("Overview");
   popsButton = new QPushButton("POPs");
   litterButton = new QPushButton("Litter Indicators");
   flourinatedButton = new QPushButton("Flourinated compounds");
   complianceButton = new QPushButton("Compliance Dashboard");
 
-
   connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
   connect(statsButton, SIGNAL(clicked()), this, SLOT(displayStats()));
-  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createOverwiew()));
+  connect(dashboardButton, SIGNAL(clicked()), this, SLOT(createDashboard()));
+  connect(overviewButton, SIGNAL(clicked()), this, SLOT(createOverview()));
   connect(popsButton, SIGNAL(clicked()), this, SLOT(createPOPs()));
   connect(litterButton, SIGNAL(clicked()), this, SLOT(createLitter()));
   connect(flourinatedButton, SIGNAL(clicked()), this, SLOT(createFlourinated()));
@@ -251,14 +334,14 @@ void WaterWindow::createButtons()
 
 void WaterWindow::createToolBar()
 {
-  toolBar = new QToolBar();
+  QToolBar *toolBar = new QToolBar();
 
   QLabel *pollutantLabel = new QLabel("Pollutant");
   pollutantLabel->setAlignment(Qt::AlignVCenter);
   toolBar->addWidget(pollutantLabel);
   toolBar->addWidget(pollutant);
 
-  QLabel *locationLabel = new QLabel("Location");
+  QLabel *locationLabel = new QLabel("location");
   locationLabel->setAlignment(Qt::AlignVCenter);
   toolBar->addWidget(locationLabel);
   toolBar->addWidget(location);
@@ -306,7 +389,6 @@ void WaterWindow::addHelpMenu()
   helpMenu->addAction(aboutQtAction);
 }
 
-
 void WaterWindow::setDataLocation()
 {
   QString directory = QFileDialog::getExistingDirectory(
@@ -321,8 +403,7 @@ void WaterWindow::setDataLocation()
 
 void WaterWindow::openCSV()
 {
-  createTableAndModel();
-  showDataLoaddedQuestion();
+  showDataLoadedQuestion();
   if (dataLocation == "")
   {
     QMessageBox::critical(this, "Data Location Error",
@@ -352,7 +433,6 @@ void WaterWindow::openCSV()
   {
     statsDialog->hide();
   }
-
 }
 
 // this is the function for the table view
@@ -374,7 +454,6 @@ void WaterWindow::displayStats()
     statsDialog->activateWindow();
   }
 }
-
 
 void WaterWindow::about()
 {

@@ -5,13 +5,13 @@
 #include <QMainWindow>
 #include "model.hpp"
 #include "water.hpp"
+#include "fchart.hpp"
 #include <QtCharts>
 #include <QtWidgets>
+#include <QLineSeries>
 #include <string>
 #include <vector>
-#include "overwiewPage.hpp"//todo added this too
-
-
+#include "overviewPage.hpp"
 
 class QString;
 class QComboBox;
@@ -26,10 +26,12 @@ class WaterWindow : public QMainWindow
 
 public:
   WaterWindow();
-  QComboBox* curLocation(){//todo i added
-      return location;
-      }
+  QComboBox* curLocation(){
+    return location;
+  }
+
 private:
+  void showDataLoadedQuestion();
   void createFileSelectors();
   void createButtons();
   void createToolBar();
@@ -38,40 +40,29 @@ private:
   void addFileMenu();
   void addHelpMenu();
   void addPOPMenu();
-  void selectOptions(std::string pollutantList[], int size);
+  void updateFileSelector(QComboBox *selector, QStringList options);
 
- //todo this is what i added
-  void createTableAndModel();
-  void showDataLoaddedQuestion();
-  QWidget* singoltenOverviewPage= nullptr;//this will be a single creation of overviewPage
-
-
-
-
+  QWidget* singoltenOverviewPage = nullptr;
 
   WaterModel model;         // data model used by table
   QString dataLocation;     // location of CSV data files
   QComboBox *pollutant;     // selector for quake feed significance level
-  QComboBox *location;        // selector for quake feed time period
+  QComboBox *location;      // selector for quake feed time period
   QPushButton *loadButton;  // button to load a new CSV file
   QPushButton *statsButton; // button to display dataset stats
+  QPushButton *dashboardButton;
   QPushButton *overviewButton;
   QPushButton *popsButton;
   QPushButton *litterButton;
   QPushButton *flourinatedButton;
   QPushButton *complianceButton;
-  QToolBar *toolBar;
+  QToolBar *toolBar; // toolbar for file and data controls
 
   QTableView *table;        // table of quake data
   QLabel *fileInfo;         // status bar info on current file
   StatsDialog *statsDialog; // dialog to display stats
 
   QLabel *pollutantName;
-  
-  //vector<pair<string, double>> pollutantInfo;
-
-  QStringList *locationOptions;
-  QStringList *pollutantOptions;
 
   QWidget *pops;
   QChart *popChart;
@@ -79,20 +70,28 @@ private:
   QScatterSeries *popSeries;
   QVBoxLayout *popsLayout;
 
+  QBarSeries *litterSeries;
+  QBarSet *set1;
+  QBarSet *set2;
+  QBarSet *set3;
+  QBarCategoryAxis *axisX;
+  QChart *chart;
+  QLineSeries *lineView;
+  QChart *litterChart;
+  QValueAxis *axisY;
+  QChartView *litterChartView;
+  QVBoxLayout *litterLayout;
   QWidget *litter;
 
-
-  QMessageBox test;
-
-public slots:
+private slots:
   void setDataLocation();
   void openCSV();
   void displayStats();
   void about();
+  void createDashboard();
+  void createOverview();
   void createPOPs();
-  void createOverwiew();
-  void updateLocations();
   void createLitter();
   void createFlourinated();
-
+  void createCompliance();
 };

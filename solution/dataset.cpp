@@ -61,7 +61,7 @@ void WaterDataset::loadData(const string &filename)
         determinand,
     };
 
-    //PollutantResults pollutantResults{
+    // PollutantResults pollutantResults{
 
     //}
 
@@ -69,11 +69,14 @@ void WaterDataset::loadData(const string &filename)
   }
 }
 
-vector<pair<string, double>> WaterDataset::getPollutants(const string& pollutantName, const string& location) {
+vector<pair<string, double>> WaterDataset::getPollutants(const string &pollutantName, const string &location)
+{
   vector<pair<string, double>> pollutantInfo;
-  for (auto i : data) {
+  for (auto i : data)
+  {
     if (i.getDeterminand().getLabel() == pollutantName &&
-    i.getSample().getSamplingPoint().getLabel() == location) {
+        i.getSample().getSamplingPoint().getLabel() == location)
+    {
       string date = i.getSample().getDateTime().substr(0, 10);
       double value = i.getResult();
       pollutantInfo.push_back({date, value});
@@ -82,10 +85,13 @@ vector<pair<string, double>> WaterDataset::getPollutants(const string& pollutant
   return pollutantInfo;
 }
 
-vector<string> WaterDataset::getLocations(const string& pollutantName) {
+vector<string> WaterDataset::getLocations(const string &pollutantName)
+{
   vector<string> locations;
-  for (auto i : data) {
-    if (i.getDeterminand().getLabel() == pollutantName) {
+  for (auto i : data)
+  {
+    if (i.getDeterminand().getLabel() == pollutantName)
+    {
       locations.push_back(i.getSample().getSamplingPoint().getLabel());
     }
   }
@@ -95,7 +101,8 @@ vector<string> WaterDataset::getLocations(const string& pollutantName) {
 vector<string> WaterDataset::getLabels()
 {
   vector<string> labels;
-  for (int i = 0; i < data.size(); i++) {
+  for (int i = 0; i < data.size(); i++)
+  {
     labels.push_back(data[i].getDeterminand().getLabel());
   }
   return labels;
@@ -112,14 +119,17 @@ vector<Water> WaterDataset::getPOPs()
   checkDataExists();
 
   string popsList[] = {"PCB Con 028", "PCB Con 105", "PCB Con 052", "PCB Con 101",
-  "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
+                       "PCB Con 138", "PCB Con 156", "PCB Con 118", "PCB Con 153", "PCB Con 180"};
   bool allFound = false;
-  for (int i = 0; i < data.size(); i++) {
-   for (string j : popsList) {
-      if (data[i].getDeterminand().getLabel() == j) {
+  for (int i = 0; i < data.size(); i++)
+  {
+    for (string j : popsList)
+    {
+      if (data[i].getDeterminand().getLabel() == j)
+      {
         pops.push_back(data[i]);
       }
-   }
+    }
   }
   return pops;
 }

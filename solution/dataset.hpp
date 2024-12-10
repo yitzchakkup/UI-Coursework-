@@ -14,8 +14,8 @@ public:
   int size() const { return data.size(); }
   Water operator[](int index) const { return data.at(index); }
 
-  std::vector<std::pair<std::string, double>> getPollutants(const std::string& pollutantName, const std::string& location);
-  std::vector<std::string> getLocations(const std::string& pollutantName);
+  std::vector<std::pair<std::string, double>> getPollutants(const std::string &pollutantName, const std::string &location);
+  std::vector<std::string> getLocations(const std::string &pollutantName);
 
   std::vector<std::string> getLabels();
 
@@ -31,12 +31,12 @@ public:
 private:
   std::vector<Water> data;
   std::vector<std::string> pollutants;
-  //std::vector<std::PollutantResults> popResults;
+  // std::vector<std::PollutantResults> popResults;
   std::vector<Water> pops;
 
   std::vector<std::string> labels;
 
-  //Water record;
+  // Water record;
 
   void checkDataExists() const;
 };
