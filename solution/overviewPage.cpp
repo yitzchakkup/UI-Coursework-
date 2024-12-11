@@ -109,13 +109,6 @@ void OverviewPage::searchBarReturnPressed()
 {
     centerLayout->removeWidget(chartView); // Detach it from the layout
 
-
-
-    //currentChart = new QLabel();
-    //rightPanelLayout->addWidget(currentChart);//todo change current chart
-
-    // Logic to be executed when Enter is pressed in the search bar
-
     QString searchTerm = searchBar->text().trimmed();
     if (searchTerm.isEmpty()) {
         QMessageBox::warning(this, "Warning", "Search term cannot be empty.");
@@ -136,7 +129,7 @@ void OverviewPage::searchBarReturnPressed()
 
 
      chartView = createPollutantTabel(searchTerm.toStdString());
-     centerLayout->addWidget(chartView);//todo deside what it gets
+     centerLayout->addWidget(chartView);
 
 
 
@@ -155,26 +148,13 @@ void OverviewPage::createSearchBar(QVBoxLayout* layout)
     connect(searchBar, SIGNAL(returnPressed()), this, SLOT(searchBarReturnPressed()));
 }
 
+
 QChartView* OverviewPage::createPollutantTabel(std::string pollutant)
 {
-    // Create a table for pollutant data
-//    QTableWidget* curTable = new QTableWidget();
-//    curTable->setRowCount(10);  // Placeholder, set based on actual data
-//    curTable->setColumnCount(3); // Columns: Pollutant, Value, Compliance
-//    curTable->setHorizontalHeaderLabels({tr("Pollutant"), tr("Value"), tr("Compliance")});
-//    return curTable;
-
-
-
-
-
     std::vector<std::pair<std::string, double>> pollutantInfo;
 
-    //    pollutantInfo = model->getData().getPollutants(searchTerm.toStdString(),
-    //                                            mainWindow->curLocation()->currentText().toStdString());
-    std::vector<std::string> allLocations =  model->getData().getLocations(pollutant);
+    std::vector<std::string> allLocations = model->getData().getLocations(pollutant);
     for (const auto& location : allLocations) {
-        //        std::cout << location << std::endl;
         // Correct usage of push_back
         auto pollutants = model->getData().getPollutants(pollutant, location);
 
@@ -183,24 +163,34 @@ QChartView* OverviewPage::createPollutantTabel(std::string pollutant)
             pollutantInfo.push_back(pollutant);
         }
     }
-    // Get the pollutant data based on the search term
 
-
-    //todo continue writing this class
-    // Sort the vector by date
     std::sort(pollutantInfo.begin(), pollutantInfo.end(), compareByDate);
-//    std::cout << "Pollutant Info:" << std::endl;
-//    for (const auto& entry : pollutantInfo) {
-//        std::cout << "Pollutant: " << entry.first << ", Value: " << entry.second << std::endl;
-//    }
-    QLineSeries* line =createPollutantChart(pollutantInfo);
-
 
     QLineSeries* series = createPollutantChart(pollutantInfo);
+
     // Create a QChart object and add the series to it
     QChart* chart = new QChart();
     chart->addSeries(series);
-    chart->createDefaultAxes();
+
+    // Configure the X-axis (Time)
+    QCategoryAxis* axisX = new QCategoryAxis();
+    axisX->append("", 0); // Adds a blank tick for alignment
+    axisX->setTitleText("Time");
+
+    QFont axisFont;
+    axisFont.setPointSize(14); // Adjust font size
+    axisX->setTitleFont(axisFont);
+    chart->addAxis(axisX, Qt::AlignBottom);
+    series->attachAxis(axisX);
+
+    // Configure the Y-axis (µg/L)
+    QValueAxis* axisY = new QValueAxis();
+    axisY->setTitleText("µg/L");
+    axisY->setLabelFormat("%.1f");
+    axisY->setTitleFont(axisFont); // Apply the same larger font
+    chart->addAxis(axisY, Qt::AlignLeft);
+    series->attachAxis(axisY);
+
     chart->setTitle("Pollutant Levels Over Time");
 
     // Create a QChartView to display the chart
@@ -208,25 +198,6 @@ QChartView* OverviewPage::createPollutantTabel(std::string pollutant)
     curChartView->setRenderHint(QPainter::Antialiasing);
     return curChartView;
 }
-
-//QLabel* OverviewPage::createChart(std::string defaultPollutant)
-//{
-//    QLabel* chartPlaceholder = new QLabel(tr("Pollutant Trend Over Time (Chart Placeholder)"));
-//    chartPlaceholder->setAlignment(Qt::AlignCenter);
-//    chartPlaceholder->setStyleSheet("border: 1px solid gray; padding: 10px;");
-//    return chartPlaceholder;
-//}
-
-//QGroupBox* OverviewPage::createColordData(std::string defaultPollutant)
-//{
-//    QGroupBox* dataBox = new QGroupBox(tr("Advanced Data"));
-//    QVBoxLayout* dataBoxLayout = new QVBoxLayout();
-//    dataBoxLayout->addWidget(new QLabel(tr("Risks: High")));
-//    dataBoxLayout->addWidget(new QLabel(tr("Compliance: Within limits")));
-//    dataBoxLayout->addWidget(new QLabel(tr("Safety thresholds: 50 µg/m³")));
-//    dataBox->setLayout(dataBoxLayout);
-//    return dataBox;
-//}
 
 QWidget* OverviewPage::createOverviewPage()
 {
@@ -252,23 +223,6 @@ QWidget* OverviewPage::createOverviewPage()
     chartView = createPollutantTabel(defaultPollutant);
     centerLayout->addWidget(chartView);
 
-    // Right-side layout for chart and data
-    //rightPanelLayout = new QVBoxLayout();
-
-    // Chart placeholder
-    //currentChart = createChart(defaultPollutant);
-
-    //rightPanelLayout->addWidget(currentChart);
-
-
-    // Advanced data group box
-    //rightPanelLayout->addWidget(createColordData(defaultPollutant));
-
-    // Add the right panel layout to the center layout
-    //centerLayout->addLayout(rightPanelLayout);
-
-    // Add the center layout to the main layout
-    //centerLayout->addLayout(centerLayout);
 
     // Set the main layout as the central widget
     QWidget* centralWidget = new QWidget();
