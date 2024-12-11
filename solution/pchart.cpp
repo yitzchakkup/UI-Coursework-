@@ -1,28 +1,31 @@
-#include "fchart.hpp"
+#include "pchart.hpp"
 #include "water.hpp"
 #include <QLineSeries>
 #include <QString>
 #include <iostream>
 #include <algorithm>
 
-bool FlourineChart::check(std::string label)
+bool POPChart::check(std::string label)
 {
-    if (label.find("flu") != std::string::npos)
+    if ((label.find("PCB") != std::string::npos) ||
+     (label.find("Nitrate") != std::string::npos) ||
+      (label.find("Sulphur") != std::string::npos) ||
+      (label.find("Phosphorus") != std::string::npos)) 
     {
         return true;
     }
-    else
+    /*else
     {
         size_t pos = label.find("per");
         if (pos != std::string::npos && (pos == 0 || !isalpha(label[pos - 1])))
         {
             return true;
         }
-    }
+    }*/
     return false;
 }
 
-QStringList FlourineChart::getDeterminands()
+QStringList POPChart::getDeterminands()
 {
     // creating a map to see how many occurences and if it is a plottable PFAS or florinated compound
     std::unordered_map<std::string, int> determinandMap;
@@ -31,9 +34,9 @@ QStringList FlourineChart::getDeterminands()
     {
         Water w = dataset[i];
         std::string label = w.getDeterminand().getLabel();
-        std::string definition = w.getDeterminand().getDefinition();
+        //std::string definition = w.getDeterminand().getDefinition();
         // filter for flourinated compounds
-        if (check(label) || check(definition))
+        if (check(label))// || check(definition))
         {
 
             if (determinands.indexOf(QString::fromStdString(label)) == -1)
@@ -59,7 +62,7 @@ QStringList FlourineChart::getDeterminands()
     return determinands;
 }
 
-QStringList FlourineChart::getLocations(std::string pollutant)
+QStringList POPChart::getLocations(std::string pollutant)
 {
     std::cout << "location pollutant" << std::endl;
     std::cout << pollutant << std::endl;
@@ -88,7 +91,7 @@ QStringList FlourineChart::getLocations(std::string pollutant)
     return locations;
 }
 
-void FlourineChart::createDataset(WaterDataset data, std::string pollutant)
+void POPChart::createDataset(WaterDataset data, std::string pollutant)
 {
     std::vector<std::pair<double, double>> plots;
 
@@ -124,7 +127,7 @@ void FlourineChart::createDataset(WaterDataset data, std::string pollutant)
     }
 }
 
-void FlourineChart::updateChart(QChart *chart, std::string pollutant)
+void POPChart::updateChart(QChart *chart, std::string pollutant)
 {
     series->clear();
     chart->removeSeries(series);
@@ -136,7 +139,7 @@ void FlourineChart::updateChart(QChart *chart, std::string pollutant)
     chart->setTitle(QString::fromStdString(pollutant));
 }
 
-void FlourineChart::initChart(QChart *chart)
+void POPChart::initChart(QChart *chart)
 {
     series = new QLineSeries();
     chart->legend()->hide();
@@ -162,12 +165,12 @@ void FlourineChart::initChart(QChart *chart)
     chart->addAxis(axisY, Qt::AlignLeft);
 
     series->attachAxis(axisX);
-    series->attachAxis(axisY);
+    series->attachAxis(axisX);
 
-    chart->setTitle("Flourinated Compounds");
+    chart->setTitle("Persistent Organic Pollutants");
 }
 
-void FlourineChart::updateCompliance(QLabel *pfaLabel, QLabel *locationLabel,
+void POPChart::updateCompliance(QLabel *pfaLabel, QLabel *locationLabel,
                                      QFrame *complianceBar, std::string pollutant, std::string location)
 {
     if (pollutant == "" || location == "")

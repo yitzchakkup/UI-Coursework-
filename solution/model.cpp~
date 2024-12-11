@@ -82,37 +82,37 @@ QVariant WaterModel::headerData(int section, Qt::Orientation orientation, int ro
   switch (section)
   {
   case 0:
-    return QString(tr("id"));
+    return QString("id");
   case 1:
-    return QString(tr("result"));
+    return QString("result");
   case 2:
-    return QString(tr("resultQualifier"));
+    return QString("resultQualifier");
   case 3:
-    return QString(tr("resultInterpretation"));
+    return QString("resultInterpretation");
   case 4:
-    return QString(tr("samplePointNotation"));
+    return QString("samplePointNotation");
   case 5:
-    return QString(tr("samplePointEasting"));
+    return QString("samplePointEasting");
   case 6:
-    return QString(tr("samplePointNorthing"));
+    return QString("samplePointNorthing");
   case 7:
-    return QString(tr("samplePointLabel"));
+    return QString("samplePointLabel");
   case 8:
-    return QString(tr("samplePurpose"));
+    return QString("samplePurpose");
   case 9:
-    return QString(tr("sampleMaterialType"));
+    return QString("sampleMaterialType");
   case 10:
-    return QString(tr("sampleDateTime"));
+    return QString("sampleDateTime");
   case 11:
-    return QString(tr("sampleIsCompliance"));
+    return QString("sampleIsCompliance");
   case 12:
-    return QString(tr("determinandLabel"));
+    return QString("determinandLabel");
   case 13:
-    return QString(tr("determinandDefinition"));
+    return QString("determinandDefinition");
   case 14:
-    return QString(tr("determinandNotation"));
+    return QString("determinandNotation");
   case 15:
-    return QString(tr("determinandUnit"));
+    return QString("determinandUnit");
   default:
     return QVariant();
   }

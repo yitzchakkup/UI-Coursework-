@@ -6,6 +6,7 @@
 #include "model.hpp"
 #include "water.hpp"
 #include "fchart.hpp"
+#include "pchart.hpp"
 #include <QtCharts>
 #include <QtWidgets>
 #include <QLineSeries>
@@ -32,6 +33,7 @@ public:
 
 private:
   void showDataLoadedQuestion();
+  void createTableAndModel();
   void createFileSelectors();
   void createButtons();
   void createToolBar();
@@ -55,7 +57,7 @@ private:
   QPushButton *popsButton;
   QPushButton *litterButton;
   QPushButton *flourinatedButton;
-  QPushButton *complianceButton;
+
   QToolBar *toolBar; // toolbar for file and data controls
 
   QTableView *table;        // table of quake data
@@ -64,11 +66,35 @@ private:
 
   QLabel *pollutantName;
 
-  QWidget *pops;
-  QChart *popChart;
-  QChartView *popsChartView;
-  QScatterSeries *popSeries;
-  QVBoxLayout *popsLayout;
+  //QWidget *dashboardWidget;
+
+  QHBoxLayout *mainLayout;
+  QLabel *appTitle;
+  QHBoxLayout *headerLayout;
+  QComboBox *languageSelector;
+  QGridLayout *cardLayout;
+  QFrame *card;
+  QVBoxLayout *cardContent;
+  QLabel *title;
+  QLabel *pageSummaries;
+  QLabel *pageButtons;
+  QHBoxLayout *filterLayout;
+  QLabel *filterLabel;
+  QComboBox *timeFilter;
+  QComboBox *regionFilter;
+  QHBoxLayout *footerLayout;
+  QPushButton *helpButton;
+  QPushButton *creditsButton;
+  QLabel *helpLink;
+  QMessageBox *helpMessage;
+
+  QWidget *popWidget;
+  QVBoxLayout *layout;
+  QLabel *pfaLabel;
+  QLabel *locationLabel;
+  QFrame *complianceBar;
+  POPChart *pchart;
+  QChartView *chartView;
 
   QBarSeries *litterSeries;
   QBarSet *set1;
@@ -83,6 +109,7 @@ private:
   QVBoxLayout *litterLayout;
   QWidget *litter;
 
+
 private slots:
   void setDataLocation();
   void openCSV();
@@ -93,5 +120,6 @@ private slots:
   void createPOPs();
   void createLitter();
   void createFlourinated();
-  void createCompliance();
+  void createHelpButton();
+  void createCreditsButton();
 };

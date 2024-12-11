@@ -6,7 +6,7 @@
 QPushButton* OverviewPage::createInfoButton()
 {
     // Create the info button
-    QPushButton* infoButton = new QPushButton("Overview Info", mainWindow);
+    QPushButton* infoButton = new QPushButton(tr("Overview Info"), mainWindow);
 
     // Make the button small
     infoButton->setFixedSize(120, 40);  // You can adjust the size as needed
@@ -68,7 +68,7 @@ void OverviewPage::showOverviewPageExplanation()
     // Show the message box
     QMessageBox::information(
         mainWindow,
-        "Overview Information",
+        tr("Overview Information"),
         QString::fromStdString(print_info)
     );
 }
@@ -91,7 +91,7 @@ void OverviewPage::searchBarReturnPressed()
 void OverviewPage::createSearchBar(QVBoxLayout* layout)
 {
     searchBar = new QLineEdit();
-    searchBar->setPlaceholderText("Find pollutant...");
+    searchBar->setPlaceholderText(tr("Find pollutant..."));
     layout->addWidget(searchBar);
 
     // Connect the returnPressed signal to the slot
@@ -104,13 +104,13 @@ QTableWidget* OverviewPage::createPollutantTabel(std::string pollutant)
     QTableWidget* pollutantsTable = new QTableWidget();
     pollutantsTable->setRowCount(10);  // Placeholder, set based on actual data
     pollutantsTable->setColumnCount(3); // Columns: Pollutant, Value, Compliance
-    pollutantsTable->setHorizontalHeaderLabels({"Pollutant", "Value", "Compliance"});
+    pollutantsTable->setHorizontalHeaderLabels({tr("Pollutant"), tr("Value"), tr("Compliance")});
     return pollutantsTable;
 }
 
 QLabel* OverviewPage::createChart(std::string defaultPollutant)
 {
-    QLabel* chartPlaceholder = new QLabel("Pollutant Trend Over Time (Chart Placeholder)");
+    QLabel* chartPlaceholder = new QLabel(tr("Pollutant Trend Over Time (Chart Placeholder)"));
     chartPlaceholder->setAlignment(Qt::AlignCenter);
     chartPlaceholder->setStyleSheet("border: 1px solid gray; padding: 10px;");
     return chartPlaceholder;
@@ -118,11 +118,11 @@ QLabel* OverviewPage::createChart(std::string defaultPollutant)
 
 QGroupBox* OverviewPage::createColordData(std::string defaultPollutant)
 {
-    QGroupBox* dataBox = new QGroupBox("Advanced Data");
+    QGroupBox* dataBox = new QGroupBox(tr("Advanced Data"));
     QVBoxLayout* dataBoxLayout = new QVBoxLayout();
-    dataBoxLayout->addWidget(new QLabel("Risks: High"));
-    dataBoxLayout->addWidget(new QLabel("Compliance: Within limits"));
-    dataBoxLayout->addWidget(new QLabel("Safety thresholds: 50 µg/m³"));
+    dataBoxLayout->addWidget(new QLabel(tr("Risks: High")));
+    dataBoxLayout->addWidget(new QLabel(tr("Compliance: Within limits")));
+    dataBoxLayout->addWidget(new QLabel(tr("Safety thresholds: 50 µg/m³")));
     dataBox->setLayout(dataBoxLayout);
     return dataBox;
 }
